@@ -1,0 +1,7 @@
+$env:TG_TOKEN="8063208023:AAEtS9ufEf452dsxxen0pfvLypG0k5miXJU"
+$env:RAPIDAPI_KEY="e063166858msh759b8dd68f14471p1c86c8jsnc333e7700feb"
+$env:RAPIDAPI_HOST="download-snapchat-video-spotlight-online.p.rapidapi.com"
+$env:FULL_URL_TEMPLATE="curl --request GET \
+	--url 'https://download-snapchat-video-spotlight-online.p.rapidapi.com/download?url=https%3A%2F%2Ft.snapchat.com%2FVSwpv1MU' \
+	--header 'x-rapidapi-host: download-snapchat-video-spotlight-online.p.rapidapi.com' \
+	--header 'x-rapidapi-key: e063166858msh759b8dd68f14471p1c86c8jsnc333e7700feb'"
