@@ -4,10 +4,10 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 
 # توكن بوت تيليجرام
-TOKEN = os.getenv("8063208023:AAEtS9ufEf452dsxxen0pfvLypG0k5miXJU")
+TOKEN = os.getenv("TELEGRAM_TOKEN")
 
 # توكن RapidAPI
-RAPIDAPI_KEY = os.getenv("e063166858msh759b8dd68f14471p1c86c8jsnc333e7700feb")
+RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 
 # معرف الـ Actor الخاص بتنزيل ستوري سناب
 ACTOR_ID = "scrapearchitect/snapchat-spotlight-story-video-downloader-metadata-extractor"
