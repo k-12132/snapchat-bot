@@ -6,7 +6,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 TOKEN = "8063208023:AAEtS9ufEf452dsxxen0pfvLypG0k5miXJU"
 
 # ضع توكن APIFY الخاص بك هنا
-APIFY_TOKEN = "ضع_توكن_APIFY_هنا"
+RAPIDAPI_KEY = "e063166858msh759b8dd68f14471p1c86c8jsnc333e7700feb"
 
 # معرف الـ Actor الخاص بتنزيل ستوري سناب
 ACTOR_ID = "scrapearchitect/snapchat-spotlight-story-video-downloader-metadata-extractor"
