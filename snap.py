@@ -1,12 +1,13 @@
+import os
 import requests
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 
-# توكن بوت تيليجرام (مكشوف، الأفضل استخدام متغير بيئة)
-TOKEN ="8063208023:AAEtS9ufEf452dsxxen0pfvLypG0k5miXJU"
+# توكن بوت تيليجرام
+TOKEN = os.getenv("8063208023:AAEtS9ufEf452dsxxen0pfvLypG0k5miXJU")
 
-# ضع توكن APIFY الخاص بك هنا
-RAPIDAPI_KEY = "e063166858msh759b8dd68f14471p1c86c8jsnc333e7700feb"
+# توكن RapidAPI
+RAPIDAPI_KEY = os.getenv("e063166858msh759b8dd68f14471p1c86c8jsnc333e7700feb")
 
 # معرف الـ Actor الخاص بتنزيل ستوري سناب
 ACTOR_ID = "scrapearchitect/snapchat-spotlight-story-video-downloader-metadata-extractor"
@@ -20,8 +21,13 @@ async def handle_url(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "video_urls": [url],
         "useKeyValueStore": False
     }
+    headers = {
+        "X-RapidAPI-Key": RAPIDAPI_KEY
+    }
+
     resp = requests.post(
-        f"https://api.apify.com/v2/acts/{ACTOR_ID}/runs?token={APIFY_TOKEN}&waitForFinish=true",
+        f"https://api.apify.com/v2/acts/{ACTOR_ID}/runs?waitForFinish=true",
+        headers=headers,
         json=payload
     ).json()
 
