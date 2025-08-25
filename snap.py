@@ -3,11 +3,15 @@ import requests
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 
-# توكن بوت تيليجرام
+# قراءة التوكنات من Environment Variables
 TOKEN = os.getenv("TELEGRAM_TOKEN")
-
-# توكن RapidAPI
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
+
+# التأكد من أن المتغيرات موجودة
+if not TOKEN:
+    raise ValueError("Environment variable TELEGRAM_TOKEN is not set.")
+if not RAPIDAPI_KEY:
+    raise ValueError("Environment variable RAPIDAPI_KEY is not set.")
 
 # معرف الـ Actor الخاص بتنزيل ستوري سناب
 ACTOR_ID = "scrapearchitect/snapchat-spotlight-story-video-downloader-metadata-extractor"
@@ -25,11 +29,16 @@ async def handle_url(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "X-RapidAPI-Key": RAPIDAPI_KEY
     }
 
-    resp = requests.post(
-        f"https://api.apify.com/v2/acts/{ACTOR_ID}/runs?waitForFinish=true",
-        headers=headers,
-        json=payload
-    ).json()
+    try:
+        resp = requests.post(
+            f"https://api.apify.com/v2/acts/{ACTOR_ID}/runs?waitForFinish=true",
+            headers=headers,
+            json=payload,
+            timeout=60
+        ).json()
+    except Exception as e:
+        await update.message.reply_text(f"🚫 حدث خطأ أثناء الاتصال بالخدمة: {e}")
+        return
 
     items = resp.get("output", {}).get("items", [])
     if not items:
