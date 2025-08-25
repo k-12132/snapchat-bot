@@ -7,13 +7,13 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 
-# التأكد من أن المتغيرات موجودة
+# التأكد من وجود المتغيرات
 if not TOKEN:
     raise ValueError("Environment variable TELEGRAM_TOKEN is not set.")
 if not RAPIDAPI_KEY:
     raise ValueError("Environment variable RAPIDAPI_KEY is not set.")
 
-# معرف الـ Actor الخاص بتنزيل ستوري سناب
+# معرف الـ Actor لتنزيل ستوري سناب
 ACTOR_ID = "scrapearchitect/snapchat-spotlight-story-video-downloader-metadata-extractor"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
