@@ -7,37 +7,37 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 
-# التأكد من وجود المتغيرات
 if not TOKEN:
     raise ValueError("Environment variable TELEGRAM_TOKEN is not set.")
 if not RAPIDAPI_KEY:
     raise ValueError("Environment variable RAPIDAPI_KEY is not set.")
 
-# رابط RapidAPI (تأكد تستبدله بالـ Endpoint الصحيح من الـ API اللي اخترته في RapidAPI)
-RAPIDAPI_URL = "https://snapchat-downloader.p.rapidapi.com/story"
+RAPIDAPI_HOST = "download-snapchat-video-spotlight-online.p.rapidapi.com"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("👋 أهلاً! أرسل رابط Story سناب شات وسأقوم بتحميله لك 📥")
+    await update.message.reply_text("👋 أرسل رابط سناب شات وسأحمله لك 📥")
 
 async def handle_url(update: Update, context: ContextTypes.DEFAULT_TYPE):
     url = update.message.text.strip()
-    payload = {"url": url}
+
+    endpoint = f"https://{RAPIDAPI_HOST}/download"
+    querystring = {"url": url}
     headers = {
-        "content-type": "application/json",
-        "X-RapidAPI-Key": RAPIDAPI_KEY,
-        "X-RapidAPI-Host": "snapchat-downloader.p.rapidapi.com"
+        "x-rapidapi-key": RAPIDAPI_KEY,
+        "x-rapidapi-host": RAPIDAPI_HOST
     }
 
     try:
-        resp = requests.post(RAPIDAPI_URL, headers=headers, json=payload, timeout=60).json()
+        response = requests.get(endpoint, headers=headers, params=querystring, timeout=30)
+        data = response.json()
     except Exception as e:
-        await update.message.reply_text(f"🚫 خطأ في الاتصال بـ RapidAPI: {e}")
+        await update.message.reply_text(f"🚫 خطأ أثناء الاتصال بـ RapidAPI: {e}")
         return
 
-    # حسب الاستجابة من RapidAPI API (عدل المفتاح لو API مختلف)
-    video_url = resp.get("video") or resp.get("download_url")
+    # التحقق من وجود رابط للفيديو
+    video_url = data.get("video") or data.get("media") or None
     if not video_url:
-        await update.message.reply_text("🚫 لم أجد أي فيديو في الرابط، تأكد أنه صحيح.")
+        await update.message.reply_text("🚫 لم أجد فيديو في الرابط، جرب رابط آخر.")
         return
 
     await update.message.reply_video(video_url)
