@@ -7,7 +7,7 @@ from telegram.ext import Dispatcher, CommandHandler, MessageHandler, filters
 # قراءة التوكنات من Environment Variables
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
-APP_URL = os.getenv("APP_URL")  # رابط الخدمة على Render، مثل https://your-app.onrender.com
+APP_URL = os.getenv("APP_URL")  # رابط الخدمة على Render، مثال: https://your-app-name.onrender.com
 
 if not TOKEN:
     raise ValueError("Environment variable TELEGRAM_TOKEN is not set.")
@@ -72,4 +72,3 @@ def set_webhook():
 # Main
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
