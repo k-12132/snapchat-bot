@@ -5,14 +5,14 @@ from telegram import Update, Bot
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 
 # -------------------------
-# قراءة المتغيرات من البيئة
+# قراءة التوكنات من Environment Variables مع قيمة افتراضية محلية
 # -------------------------
-TOKEN = os.getenv("TELEGRAM_TOKEN")
-RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
-APP_URL = os.getenv("APP_URL")  # الرابط العام للخدمة على Render
+TOKEN = os.getenv("TELEGRAM_TOKEN", "YOUR_LOCAL_TELEGRAM_TOKEN")
+RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY", "YOUR_LOCAL_RAPIDAPI_KEY")
+APP_URL = os.getenv("APP_URL", "http://localhost:5000")  # رابط مؤقت للتطوير المحلي
 
-if not TOKEN or not RAPIDAPI_KEY or not APP_URL:
-    raise ValueError("Environment variables TELEGRAM_TOKEN, RAPIDAPI_KEY, APP_URL must be set")
+if not TOKEN or not RAPIDAPI_KEY:
+    raise ValueError("Missing TELEGRAM_TOKEN or RAPIDAPI_KEY")
 
 RAPIDAPI_HOST = "download-snapchat-video-spotlight-online.p.rapidapi.com"
 
@@ -51,7 +51,7 @@ async def handle_url(update: Update, context):
     await update.message.reply_video(video_url)
 
 # -------------------------
-# إنشاء التطبيق
+# إنشاء التطبيق وإضافة Handlers
 # -------------------------
 application = ApplicationBuilder().token(TOKEN).build()
 application.add_handler(CommandHandler("start", start))
@@ -63,15 +63,15 @@ application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_u
 @app.route(f"/webhook/{TOKEN}", methods=["POST"])
 def webhook():
     """
-    هذا المسار يستقبل تحديثات Telegram عبر POST.
-    لا تفتحه في المتصفح لأنه GET → Not Found طبيعي.
+    المسار الذي يستقبل تحديثات Telegram عبر POST
+    لا تفتحه في المتصفح مباشرة
     """
     update = Update.de_json(request.get_json(force=True), bot)
     application.update_queue.put_nowait(update)
     return Response("ok", status=200)
 
 # -------------------------
-# ضبط Webhook في Telegram
+# ضبط Webhook
 # -------------------------
 @app.route("/set_webhook", methods=["GET"])
 def set_webhook():
@@ -88,5 +88,4 @@ def set_webhook():
 # تشغيل Flask
 # -------------------------
 if __name__ == "__main__":
-    # Render يعطي PORT تلقائيًا، لذلك نستخدمه
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
