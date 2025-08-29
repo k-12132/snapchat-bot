@@ -4,12 +4,13 @@ from flask import Flask, request, Response
 from telegram import Update, Bot
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 
+# قراءة التوكنات من Environment Variables
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
-APP_URL = os.getenv("APP_URL")
+APP_URL = os.getenv("APP_URL")  # رابط الخدمة على Render
 
 if not TOKEN or not RAPIDAPI_KEY or not APP_URL:
-    raise ValueError("Missing environment variables")
+    raise ValueError("Environment variables TELEGRAM_TOKEN, RAPIDAPI_KEY, APP_URL must be set")
 
 RAPIDAPI_HOST = "download-snapchat-video-spotlight-online.p.rapidapi.com"
 
